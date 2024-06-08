@@ -174,6 +174,11 @@ public class main extends javax.swing.JFrame {
         jLabel9.setText("Nombre Instancia");
 
         JB_Probar1.setText("Probar");
+        JB_Probar1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JB_Probar1MouseClicked(evt);
+            }
+        });
 
         JB_Guardar.setText("Guardar");
         JB_Guardar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -334,7 +339,7 @@ public class main extends javax.swing.JFrame {
         String password = JT_Password.getText();
 
         try {
-            Connection conn = DatabaseConnection.connectToSQLServerWindowsAuth(instance, database);
+            Connection conn = DatabaseConnection.getSQLServerConnection(instance, database,port, user, password);
             JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos origen");
             conn.close();
         } catch (SQLException ex) {
@@ -342,6 +347,22 @@ public class main extends javax.swing.JFrame {
       }
     
     }//GEN-LAST:event_JB_ProbarMouseClicked
+
+    private void JB_Probar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JB_Probar1MouseClicked
+        String instance = JT_NombreInstancia1.getText();
+        String database = JT_NombreBD1.getText();
+        String port = JT_Puerto1.getText();
+        String user = JT_NombreUser1.getText();
+        String password = JT_Password1.getText();
+
+        try {
+            Connection conn = DatabaseConnection.connectToPostgreSQL(instance, database,port, user, password);
+            JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos origen");
+            conn.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
+      }
+    }//GEN-LAST:event_JB_Probar1MouseClicked
 
 /**
  * @param args the command line arguments
