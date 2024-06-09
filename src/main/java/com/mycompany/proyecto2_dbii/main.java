@@ -2,8 +2,10 @@ package com.mycompany.proyecto2_dbii;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -18,7 +20,16 @@ import javax.swing.JOptionPane;
  * @author Julian Bendaña
  */
 public class main extends javax.swing.JFrame {
-
+private String instanceSQlOrigen;
+private String portOrigen;
+private String databaseOrigen;
+private String userOrigen;
+private String passOrigen;
+private String instanceSQlDestino;
+private String portDestino;
+private String databaseDestino;
+private String userDestino;
+private String passDestino;
     /**
      * Creates new form main
      */
@@ -374,6 +385,18 @@ public class main extends javax.swing.JFrame {
         jFrame1.setVisible(true);
         jFrame1.pack();
         this.setVisible(false);
+        
+        instanceSQlOrigen = JT_NombreInstancia.getText();
+        databaseOrigen = JT_NombreBD.getText();
+        portOrigen = JT_Puerto.getText();
+        userOrigen= JT_NombreUser.getText();
+        passOrigen = JT_Password.getText();
+        
+        instanceSQlDestino = JT_NombreInstancia1.getText();
+        databaseDestino= JT_NombreBD1.getText();
+        portDestino = JT_Puerto1.getText();
+        userDestino= JT_NombreUser1.getText();
+        passDestino= JT_Password1.getText();
     }//GEN-LAST:event_JB_GuardarMouseClicked
 
     private void JB_ProbarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JB_ProbarMouseClicked
@@ -430,22 +453,24 @@ public class main extends javax.swing.JFrame {
         for (String value : selectedValues) {
             modelSinReplicar.addElement(value);
             modelReplicando.removeElement(value);
-        }    }//GEN-LAST:event_btnRemoverMouseClicked
+            
+        }
 
+    }//GEN-LAST:event_btnRemoverMouseClicked
     private void btnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseClicked
-    
+
         DefaultListModel<String> modelReplicando = (DefaultListModel<String>) jListReplicando.getModel();
         List<String> tablasAReplicar = Collections.list(modelReplicando.elements());
 
         // Guardar la lista de tablas a replicar en algún lugar (e.g., base de datos, archivo de configuración)
         // Implementar aquí la lógica para guardar las tablas seleccionadas
-    
+
     }//GEN-LAST:event_btnGuardarMouseClicked
 
-/**
- * @param args the command line arguments
- */
-public static void main(String args[]) {
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -457,27 +482,23 @@ public static void main(String args[]) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
 
-}
+                }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(main.class  
+            java.util.logging.Logger.getLogger(main.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(main.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(main.class  
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(main.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-} catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(main.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(main.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(main.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -487,6 +508,107 @@ public static void main(String args[]) {
                 new main().setVisible(true);
             }
         });
+    }
+
+    public void ejecutarJobReplicacion() {
+        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); 
+        Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+
+            String query = "SELECT Operacion, Tabla, RegistroId FROM Bitacora WHERE Procesado = 0";
+            Statement stmtSQL = connSQL.createStatement();
+            ResultSet rs = stmtSQL.executeQuery(query);
+
+            while (rs.next()) {
+                String operacion = rs.getString("Operacion");
+                String tabla = rs.getString("Tabla");
+                int registroId = rs.getInt("RegistroId");
+
+                if (operacion.equals("INSERT")) {
+                    replicarInsert(connSQL, connPostgre, tabla, registroId);
+                } else if (operacion.equals("UPDATE")) {
+                    replicarUpdate(connSQL, connPostgre, tabla, registroId);
+                } else if (operacion.equals("DELETE")) {
+                    replicarDelete(connPostgre, tabla, registroId);
+                }
+
+                // Marca la operación como procesada
+                String update = "UPDATE Bitacora SET Procesado = 1 WHERE Operacion = ? AND Tabla = ? AND RegistroId = ?";
+                PreparedStatement pstmt = connSQL.prepareStatement(update);
+                pstmt.setString(1, operacion);
+                pstmt.setString(2, tabla);
+                pstmt.setInt(3, registroId);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void replicarInsert(Connection connSQL, Connection connPostgre, String tabla, int registroId) throws SQLException {
+        // Recupera el registro completo de SQL Server
+        String querySQL = "SELECT * FROM " + tabla + " WHERE Id = ?";
+        PreparedStatement pstmtSQL = connSQL.prepareStatement(querySQL);
+        pstmtSQL.setInt(1, registroId);
+        ResultSet rs = pstmtSQL.executeQuery();
+
+        if (rs.next()) {
+            // Crea una inserción en PostgreSQL con los datos recuperados
+            StringBuilder fields = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                if (i > 1) {
+                    fields.append(", ");
+                    values.append(", ");
+                }
+                fields.append(rs.getMetaData().getColumnName(i));
+                values.append("?");
+            }
+
+            String insertPostgre = "INSERT INTO " + tabla + " (" + fields.toString() + ") VALUES (" + values.toString() + ")";
+            PreparedStatement pstmtPostgre = connPostgre.prepareStatement(insertPostgre);
+
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                pstmtPostgre.setObject(i, rs.getObject(i));
+            }
+            pstmtPostgre.executeUpdate();
+        }
+    }
+
+    private void replicarUpdate(Connection connSQL, Connection connPostgre, String tabla, int registroId) throws SQLException {
+        // Recupera el registro completo de SQL Server
+        String querySQL = "SELECT * FROM " + tabla + " WHERE Id = ?";
+        PreparedStatement pstmtSQL = connSQL.prepareStatement(querySQL);
+        pstmtSQL.setInt(1, registroId);
+        ResultSet rs = pstmtSQL.executeQuery();
+
+        if (rs.next()) {
+            // Crea una actualización en PostgreSQL con los datos recuperados
+            StringBuilder setClause = new StringBuilder();
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                if (i > 1) {
+                    setClause.append(", ");
+                }
+                setClause.append(rs.getMetaData().getColumnName(i)).append(" = ?");
+            }
+
+            String updatePostgre = "UPDATE " + tabla + " SET " + setClause.toString() + " WHERE Id = ?";
+            PreparedStatement pstmtPostgre = connPostgre.prepareStatement(updatePostgre);
+
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                pstmtPostgre.setObject(i, rs.getObject(i));
+            }
+            pstmtPostgre.setInt(rs.getMetaData().getColumnCount() + 1, registroId);
+            pstmtPostgre.executeUpdate();
+        }
+    }
+
+    private void replicarDelete(Connection connPostgre, String tabla, int registroId) throws SQLException {
+        // Elimina el registro en PostgreSQL
+        String deletePostgre = "DELETE FROM " + tabla + " WHERE Id = ?";
+        PreparedStatement pstmtPostgre = connPostgre.prepareStatement(deletePostgre);
+        pstmtPostgre.setInt(1, registroId);
+        pstmtPostgre.executeUpdate();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
