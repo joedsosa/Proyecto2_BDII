@@ -1,7 +1,12 @@
 package com.mycompany.proyecto2_dbii;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 /*
@@ -35,10 +40,14 @@ public class main extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListReplicando = new javax.swing.JList<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListSinReplicar = new javax.swing.JList<>();
         JB_Probar = new javax.swing.JButton();
         JT_Password = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -75,13 +84,42 @@ public class main extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel16.setText("Replicando");
 
-        jButton1.setText(">>");
+        btnAgregar.setText(">>");
+        btnAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseClicked(evt);
+            }
+        });
 
-        jButton2.setText("<<");
+        btnRemover.setText("<<");
+        btnRemover.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRemoverMouseClicked(evt);
+            }
+        });
 
-        jButton3.setText("Guardar");
+        btnGuardar.setText("Guardar");
+        btnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGuardarMouseClicked(evt);
+            }
+        });
 
-        jButton4.setText("Cancelar");
+        btnCancelar.setText("Cancelar");
+
+        jListReplicando.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jListReplicando);
+
+        jListSinReplicar.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jListSinReplicar);
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -89,30 +127,34 @@ public class main extends javax.swing.JFrame {
             jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFrame1Layout.createSequentialGroup()
                 .addGap(49, 49, 49)
-                .addComponent(jLabel15)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addGap(167, 167, 167))
                     .addGroup(jFrame1Layout.createSequentialGroup()
-                        .addGap(220, 220, 220)
-                        .addComponent(jLabel16)))
-                .addGap(28, 28, 28))
-            .addGroup(jFrame1Layout.createSequentialGroup()
-                .addGap(109, 109, 109)
-                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(94, 94, 94))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
+                        .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jFrame1Layout.createSequentialGroup()
+                                .addComponent(jLabel15)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
+                                        .addComponent(jLabel14)
+                                        .addGap(167, 167, 167))
+                                    .addGroup(jFrame1Layout.createSequentialGroup()
+                                        .addGap(220, 220, 220)
+                                        .addComponent(jLabel16))))
+                            .addGroup(jFrame1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(65, 65, 65)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28))))
         );
         jFrame1Layout.setVerticalGroup(
             jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,13 +169,17 @@ public class main extends javax.swing.JFrame {
                         .addGap(41, 41, 41)
                         .addComponent(jLabel16)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(113, Short.MAX_VALUE))
         );
 
@@ -339,13 +385,13 @@ public class main extends javax.swing.JFrame {
         String password = JT_Password.getText();
 
         try {
-            Connection conn = DatabaseConnection.getSQLServerConnection(instance, database,port, user, password);
+            Connection conn = DatabaseConnection.getSQLServerConnection(instance, database, port, user, password);
             JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos origen");
             conn.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
-      }
-    
+        }
+
     }//GEN-LAST:event_JB_ProbarMouseClicked
 
     private void JB_Probar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JB_Probar1MouseClicked
@@ -356,13 +402,45 @@ public class main extends javax.swing.JFrame {
         String password = JT_Password1.getText();
 
         try {
-            Connection conn = DatabaseConnection.connectToPostgreSQL(instance, database,port, user, password);
+            Connection conn = DatabaseConnection.connectToPostgreSQL(instance, database, port, user, password);
             JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos origen");
             conn.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
-      }
+        }
     }//GEN-LAST:event_JB_Probar1MouseClicked
+
+    private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
+        // TODO add your handling code here:
+        List<String> selectedValues = jListSinReplicar.getSelectedValuesList();
+        DefaultListModel<String> modelSinReplicar = (DefaultListModel<String>) jListSinReplicar.getModel();
+        DefaultListModel<String> modelReplicando = (DefaultListModel<String>) jListReplicando.getModel();
+
+        for (String value : selectedValues) {
+            modelReplicando.addElement(value);
+            modelSinReplicar.removeElement(value);
+        }
+    }//GEN-LAST:event_btnAgregarMouseClicked
+
+    private void btnRemoverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRemoverMouseClicked
+        List<String> selectedValues = jListReplicando.getSelectedValuesList();
+        DefaultListModel<String> modelSinReplicar = (DefaultListModel<String>) jListSinReplicar.getModel();
+        DefaultListModel<String> modelReplicando = (DefaultListModel<String>) jListReplicando.getModel();
+
+        for (String value : selectedValues) {
+            modelSinReplicar.addElement(value);
+            modelReplicando.removeElement(value);
+        }    }//GEN-LAST:event_btnRemoverMouseClicked
+
+    private void btnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseClicked
+    
+        DefaultListModel<String> modelReplicando = (DefaultListModel<String>) jListReplicando.getModel();
+        List<String> tablasAReplicar = Collections.list(modelReplicando.elements());
+
+        // Guardar la lista de tablas a replicar en algún lugar (e.g., base de datos, archivo de configuración)
+        // Implementar aquí la lógica para guardar las tablas seleccionadas
+    
+    }//GEN-LAST:event_btnGuardarMouseClicked
 
 /**
  * @param args the command line arguments
@@ -425,10 +503,10 @@ public static void main(String args[]) {
     private javax.swing.JTextField JT_Password1;
     private javax.swing.JTextField JT_Puerto;
     private javax.swing.JTextField JT_Puerto1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -446,5 +524,33 @@ public static void main(String args[]) {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JList<String> jListReplicando;
+    private javax.swing.JList<String> jListSinReplicar;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+private void cargarTablasOrigen() {
+        String instance = JT_NombreInstancia.getText();
+        String database = JT_NombreBD.getText();
+        String port = JT_Puerto.getText();
+        String user = JT_NombreUser.getText();
+        String password = JT_Password.getText();
+
+        DefaultListModel<String> model = new DefaultListModel<>();
+
+        try (Connection conn = DatabaseConnection.getSQLServerConnection(instance, database, port, user, password)) {
+            DatabaseMetaData metaData = conn.getMetaData();
+            ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+
+            while (tables.next()) {
+                String tableName = tables.getString("TABLE_NAME");
+                model.addElement(tableName);
+            }
+
+            jListSinReplicar.setModel(model);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
+        }
+    }
+
 }
