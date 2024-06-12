@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -38,19 +39,20 @@ public class main extends javax.swing.JFrame {
     public main() {
         initComponents();
         this.setLocationRelativeTo(null);
-        JT_NombreInstancia.setText("sqlserverdb.c3rphpy5bbiu.us-east-1.rds.amazonaws.com");
-        JT_NombreBD.setText("proyecto");
-        JT_Puerto.setText("1433");
-        JT_NombreUser.setText("admin");
-        JT_Password.setText("admin123");
-        
-        JT_NombreInstancia1.setText("dbpostgre.c3rphpy5bbiu.us-east-1.rds.amazonaws.com");
+        JT_NombreInstancia1.setText("sqlserverdb.c3rphpy5bbiu.us-east-1.rds.amazonaws.com");
         JT_NombreBD1.setText("proyecto");
-        JT_Puerto1.setText("5432");
-        JT_NombreUser1.setText("admin123");
+        JT_Puerto1.setText("1433");
+        JT_NombreUser1.setText("admin");
         JT_Password1.setText("admin123");
-        
-        
+
+        JT_NombreInstancia.setText("dbpostgre.c3rphpy5bbiu.us-east-1.rds.amazonaws.com");
+        JT_NombreBD.setText("proyecto");
+        JT_Puerto.setText("5432");
+        JT_NombreUser.setText("admin123");
+        JT_Password.setText("admin123");
+        jListSinReplicar.setModel(new DefaultListModel<String>());
+        jListReplicando.setModel(new DefaultListModel<String>());
+
     }
 
     /**
@@ -116,6 +118,11 @@ public class main extends javax.swing.JFrame {
                 btnAgregarMouseClicked(evt);
             }
         });
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         btnRemover.setText("<<");
         btnRemover.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -152,9 +159,9 @@ public class main extends javax.swing.JFrame {
         jFrame1Layout.setHorizontalGroup(
             jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
-                .addGap(216, 216, 216)
+                .addGap(214, 214, 214)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72)
+                .addGap(74, 74, 74)
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jFrame1Layout.createSequentialGroup()
@@ -194,17 +201,18 @@ public class main extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
+                        .addGap(18, 18, 18)
                         .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
-                        .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jFrame1Layout.createSequentialGroup()
                         .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(59, 59, 59)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(199, 199, 199))
         );
@@ -323,16 +331,19 @@ public class main extends javax.swing.JFrame {
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(JT_NombreBD)
                                         .addComponent(JT_Puerto)))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(68, 68, 68)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JB_Probar, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(JT_Password, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(JB_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(JT_Password, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 282, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(JB_Probar, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(JB_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(43, 43, 43))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -358,16 +369,16 @@ public class main extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(JT_NombreUser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(JT_Password, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(JB_Probar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(JB_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(JT_Password, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(JB_Probar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8))
+                    .addComponent(JB_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JT_NombreInstancia1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -454,12 +465,18 @@ public class main extends javax.swing.JFrame {
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
         List<String> selectedValues = jListSinReplicar.getSelectedValuesList();
-        DefaultListModel<String> modelSinReplicar = (DefaultListModel<String>) jListSinReplicar.getModel();
-        DefaultListModel<String> modelReplicando = (DefaultListModel<String>) jListReplicando.getModel();
+        // Verifica si los modelos son instancias de DefaultListModel
+        if (jListSinReplicar.getModel() instanceof DefaultListModel && jListReplicando.getModel() instanceof DefaultListModel) {
+            DefaultListModel<String> modelSinReplicar = (DefaultListModel<String>) jListSinReplicar.getModel();
+            DefaultListModel<String> modelReplicando = (DefaultListModel<String>) jListReplicando.getModel();
 
-        for (String value : selectedValues) {
-            modelReplicando.addElement(value);
-            modelSinReplicar.removeElement(value);
+            for (String value : selectedValues) {
+                modelReplicando.addElement(value);
+                modelSinReplicar.removeElement(value);
+            }
+        } else {
+            // Manejo del error si el modelo no es del tipo esperado
+            JOptionPane.showMessageDialog(this, "Error: El modelo de las listas no es del tipo DefaultListModel");
         }
     }//GEN-LAST:event_btnAgregarMouseClicked
 
@@ -480,10 +497,30 @@ public class main extends javax.swing.JFrame {
         DefaultListModel<String> modelReplicando = (DefaultListModel<String>) jListReplicando.getModel();
         List<String> tablasAReplicar = Collections.list(modelReplicando.elements());
 
+        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+
+            for (String tabla : tablasAReplicar) {
+                replicarTablaEstructura(connSQL, connPostgre, tabla);
+                replicarTablaInicial(connSQL, connPostgre, tabla);
+            }
+
+            JOptionPane.showMessageDialog(null, "Migración completada con éxito");
+
+            // Iniciar replicación continua
+            ejecutarJobReplicacion();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error durante la migración: " + e.getMessage());
+        }
         // Guardar la lista de tablas a replicar en algún lugar (e.g., base de datos, archivo de configuración)
         // Implementar aquí la lógica para guardar las tablas seleccionadas
 
     }//GEN-LAST:event_btnGuardarMouseClicked
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -549,7 +586,7 @@ public class main extends javax.swing.JFrame {
                 }
 
                 // Marca la operación como procesada
-                String update = "UPDATE Bitacora SET Procesado = 1 WHERE Operacion = ? AND Tabla = ? AND RegistroId = ?";
+                String update = "UPDATE Bitacora SET procesado = 1 WHERE operacion = ? AND tabla = ? AND registroid = ?";
                 PreparedStatement pstmt = connSQL.prepareStatement(update);
                 pstmt.setString(1, operacion);
                 pstmt.setString(2, tabla);
@@ -689,6 +726,116 @@ private void cargarTablasOrigen() {
             jListSinReplicar.setModel(model);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
+        }
+    }
+
+    private void replicarTablaEstructura(Connection connSQL, Connection connPostgre, String tabla) throws SQLException {
+        // Obtener la estructura de la tabla desde SQL Server
+        DatabaseMetaData metaData = connSQL.getMetaData();
+        ResultSet columns = metaData.getColumns(null, null, tabla, null);
+        ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tabla);
+        ResultSet foreignKeys = metaData.getImportedKeys(null, null, tabla);
+
+        StringBuilder createTableSQL = new StringBuilder("CREATE TABLE " + tabla + " (");
+        StringBuilder primaryKeySQL = new StringBuilder();
+        List<String> foreignKeySQL = new ArrayList<>();
+
+        while (columns.next()) {
+            String columnName = columns.getString("COLUMN_NAME");
+            String columnType = columns.getString("TYPE_NAME");
+            int columnSize = columns.getInt("COLUMN_SIZE");
+
+            if (createTableSQL.length() > ("CREATE TABLE " + tabla + " (").length()) {
+                createTableSQL.append(", ");
+            }
+
+            // Ajustar los tipos de datos según sea necesario entre SQL Server y PostgreSQL
+            String postgreColumnType = mapSQLServerToPostgreSQLType(columnType, columnSize);
+            createTableSQL.append(columnName).append(" ").append(postgreColumnType);
+        }
+
+        while (primaryKeys.next()) {
+            String pkName = primaryKeys.getString("COLUMN_NAME");
+
+            if (primaryKeySQL.length() > 0) {
+                primaryKeySQL.append(", ");
+            }
+            primaryKeySQL.append(pkName);
+        }
+
+        if (primaryKeySQL.length() > 0) {
+            createTableSQL.append(", PRIMARY KEY (").append(primaryKeySQL.toString()).append(")");
+        }
+
+        while (foreignKeys.next()) {
+            String fkName = foreignKeys.getString("FKCOLUMN_NAME");
+            String pkTableName = foreignKeys.getString("PKTABLE_NAME");
+            String pkColumnName = foreignKeys.getString("PKCOLUMN_NAME");
+
+            foreignKeySQL.add("FOREIGN KEY (" + fkName + ") REFERENCES " + pkTableName + " (" + pkColumnName + ")");
+        }
+
+        for (String fkSQL : foreignKeySQL) {
+            createTableSQL.append(", ").append(fkSQL);
+        }
+
+        createTableSQL.append(")");
+
+        // Ejecutar la declaración de creación de tabla en PostgreSQL
+        try (Statement stmtPostgre = connPostgre.createStatement()) {
+            stmtPostgre.executeUpdate(createTableSQL.toString());
+        }
+    }
+
+    private String mapSQLServerToPostgreSQLType(String sqlServerType, int size) {
+        switch (sqlServerType) {
+            case "varchar":
+            case "nvarchar":
+            case "char":
+            case "nchar":
+                return "VARCHAR(" + size + ")";
+            case "int":
+                return "INTEGER";
+            case "bigint":
+                return "BIGINT";
+            case "float":
+                return "FLOAT";
+            case "bit":
+                return "BOOLEAN";
+            case "datetime":
+            case "smalldatetime":
+                return "TIMESTAMP";
+            // Añadir más mapeos según sea necesario
+            default:
+                return sqlServerType; // Por defecto, devolver el tipo original (puede necesitar ajuste)
+        }
+    }
+
+    private void replicarTablaInicial(Connection connSQL, Connection connPostgre, String tabla) throws SQLException {
+        // Recupera todos los registros de SQL Server
+        String querySQL = "SELECT * FROM " + tabla;
+        Statement stmtSQL = connSQL.createStatement();
+        ResultSet rs = stmtSQL.executeQuery(querySQL);
+
+        while (rs.next()) {
+            StringBuilder fields = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                if (i > 1) {
+                    fields.append(", ");
+                    values.append(", ");
+                }
+                fields.append(rs.getMetaData().getColumnName(i));
+                values.append("?");
+            }
+
+            String insertPostgre = "INSERT INTO " + tabla + " (" + fields.toString() + ") VALUES (" + values.toString() + ")";
+            PreparedStatement pstmtPostgre = connPostgre.prepareStatement(insertPostgre);
+
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                pstmtPostgre.setObject(i, rs.getObject(i));
+            }
+            pstmtPostgre.executeUpdate();
         }
     }
 
