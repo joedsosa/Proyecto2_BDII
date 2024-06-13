@@ -39,17 +39,18 @@ public class main extends javax.swing.JFrame {
     public main() {
         initComponents();
         this.setLocationRelativeTo(null);
-        JT_NombreInstancia1.setText("sqlserverdb.c3rphpy5bbiu.us-east-1.rds.amazonaws.com");
+        CB_NombreInstancia.setSelectedIndex(0);
+        JT_NombreBD.setText("proyecto");
+        JT_Puerto.setText("1433");
+        JT_NombreUser.setText("admin");
+        JT_Password.setText("admin123");
+
+        CB_NombreInstancia1.setSelectedIndex(1);
         JT_NombreBD1.setText("proyecto");
-        JT_Puerto1.setText("1433");
-        JT_NombreUser1.setText("admin");
+        JT_Puerto1.setText("5432");
+        JT_NombreUser1.setText("admin123");
         JT_Password1.setText("admin123");
 
-        JT_NombreInstancia.setText("dbpostgre.c3rphpy5bbiu.us-east-1.rds.amazonaws.com");
-        JT_NombreBD.setText("proyecto");
-        JT_Puerto.setText("5432");
-        JT_NombreUser.setText("admin123");
-        JT_Password.setText("admin123");
         jListSinReplicar.setModel(new DefaultListModel<String>());
         jListReplicando.setModel(new DefaultListModel<String>());
 
@@ -85,13 +86,11 @@ public class main extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         JT_NombreBD = new javax.swing.JTextField();
-        JT_NombreInstancia = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        JT_NombreInstancia1 = new javax.swing.JTextField();
         JT_NombreBD1 = new javax.swing.JTextField();
         JT_Puerto1 = new javax.swing.JTextField();
         JT_NombreUser1 = new javax.swing.JTextField();
@@ -102,6 +101,15 @@ public class main extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        CB_NombreInstancia = new javax.swing.JComboBox<>();
+        CB_NombreInstancia1 = new javax.swing.JComboBox<>();
+
+        jFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jFrame1.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                jFrame1WindowClosed(evt);
+            }
+        });
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setText("Tablas BD Origen");
@@ -139,6 +147,11 @@ public class main extends javax.swing.JFrame {
         });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseClicked(evt);
+            }
+        });
 
         jListReplicando.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -279,6 +292,20 @@ public class main extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setText("Nombre Base Datos");
 
+        CB_NombreInstancia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "sqlserverdb.c3rphpy5bbiu.us-east-1.rds.amazonaws.com", "dbpostgre.c3rphpy5bbiu.us-east-1.rds.amazonaws.com" }));
+        CB_NombreInstancia.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                CB_NombreInstanciaItemStateChanged(evt);
+            }
+        });
+
+        CB_NombreInstancia1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "sqlserverdb.c3rphpy5bbiu.us-east-1.rds.amazonaws.com", "dbpostgre.c3rphpy5bbiu.us-east-1.rds.amazonaws.com" }));
+        CB_NombreInstancia1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                CB_NombreInstancia1ItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -293,7 +320,7 @@ public class main extends javax.swing.JFrame {
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addComponent(jLabel9)
                                     .addGap(18, 18, 18)
-                                    .addComponent(JT_NombreInstancia1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(CB_NombreInstancia1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addComponent(jLabel10)
                                     .addGap(4, 4, 4)
@@ -318,10 +345,10 @@ public class main extends javax.swing.JFrame {
                                 .addGap(27, 27, 27)
                                 .addComponent(JT_NombreUser, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addComponent(jLabel3)
                                     .addGap(18, 18, 18)
-                                    .addComponent(JT_NombreInstancia))
+                                    .addComponent(CB_NombreInstancia, 0, 326, Short.MAX_VALUE))
                                 .addComponent(jLabel1)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,8 +381,8 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JT_NombreInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(CB_NombreInstancia, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -381,8 +408,8 @@ public class main extends javax.swing.JFrame {
                     .addComponent(JB_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JT_NombreInstancia1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
+                    .addComponent(jLabel9)
+                    .addComponent(CB_NombreInstancia1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
@@ -408,39 +435,64 @@ public class main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JB_GuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JB_GuardarMouseClicked
-        jFrame1.setLocationRelativeTo(null);
-        jFrame1.setVisible(true);
-        jFrame1.pack();
-        this.setVisible(false);
+        if (CB_NombreInstancia.getSelectedIndex() == 0 && CB_NombreInstancia1.getSelectedIndex() == 0
+                || CB_NombreInstancia.getSelectedIndex() == 1 && CB_NombreInstancia1.getSelectedIndex() == 1) {
+            JOptionPane.showMessageDialog(this, "Utilice diferentes motores");
+        } else {
+            jFrame1.pack();
+            jFrame1.setLocationRelativeTo(this);
+            jFrame1.setVisible(true);
+            this.setVisible(false);
 
-        instanceSQlOrigen = JT_NombreInstancia.getText();
-        databaseOrigen = JT_NombreBD.getText();
-        portOrigen = JT_Puerto.getText();
-        userOrigen = JT_NombreUser.getText();
-        passOrigen = JT_Password.getText();
+            if (CB_NombreInstancia.getSelectedIndex() == 0) {
+                sqlServer = true;
+                instanceSQlOrigen = "sqlserverdb.c3rphpy5bbiu.us-east-1.rds.amazonaws.com";
+                instanceSQlDestino = "dbpostgre.c3rphpy5bbiu.us-east-1.rds.amazonaws.com";
+            } else {
+                sqlServer = false;
+                instanceSQlDestino = "sqlserverdb.c3rphpy5bbiu.us-east-1.rds.amazonaws.com";
+                instanceSQlOrigen = "dbpostgre.c3rphpy5bbiu.us-east-1.rds.amazonaws.com";
+            }
+            databaseOrigen = JT_NombreBD.getText();
+            portOrigen = JT_Puerto.getText();
+            userOrigen = JT_NombreUser.getText();
+            passOrigen = JT_Password.getText();
 
-        instanceSQlDestino = JT_NombreInstancia1.getText();
-        databaseDestino = JT_NombreBD1.getText();
-        portDestino = JT_Puerto1.getText();
-        userDestino = JT_NombreUser1.getText();
-        passDestino = JT_Password1.getText();
+            databaseDestino = JT_NombreBD1.getText();
+            portDestino = JT_Puerto1.getText();
+            userDestino = JT_NombreUser1.getText();
+            passDestino = JT_Password1.getText();
 
-        cargarTablasOrigen();
+            cargarTablasOrigen();
+        }
+
 
     }//GEN-LAST:event_JB_GuardarMouseClicked
 
     private void JB_ProbarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JB_ProbarMouseClicked
         // TODO add your handling code here:
-        String instance = JT_NombreInstancia.getText();
+        String instance;
+        if (CB_NombreInstancia.getSelectedIndex() == 0) {
+            instance = "sqlserverdb.c3rphpy5bbiu.us-east-1.rds.amazonaws.com";
+        } else {
+            instance = "dbpostgre.c3rphpy5bbiu.us-east-1.rds.amazonaws.com";
+        }
+
         String database = JT_NombreBD.getText();
         String port = JT_Puerto.getText();
         String user = JT_NombreUser.getText();
         String password = JT_Password.getText();
 
         try {
-            Connection conn = DatabaseConnection.getSQLServerConnection(instance, database, port, user, password);
-            JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos origen");
-            conn.close();
+            if (CB_NombreInstancia.getSelectedIndex() == 0) {
+                Connection conn = DatabaseConnection.getSQLServerConnection(instance, database, port, user, password);
+                JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos origen");
+                conn.close();
+            } else {
+                Connection conn = DatabaseConnection.connectToPostgreSQL(instance, database, port, user, password);
+                JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos origen");
+                conn.close();
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
         }
@@ -448,16 +500,28 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_JB_ProbarMouseClicked
 
     private void JB_Probar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JB_Probar1MouseClicked
-        String instance = JT_NombreInstancia1.getText();
+        String instance;
+        if (CB_NombreInstancia1.getSelectedIndex() == 0) {
+            instance = "sqlserverdb.c3rphpy5bbiu.us-east-1.rds.amazonaws.com";
+        } else {
+            instance = "dbpostgre.c3rphpy5bbiu.us-east-1.rds.amazonaws.com";
+        }
+
         String database = JT_NombreBD1.getText();
         String port = JT_Puerto1.getText();
         String user = JT_NombreUser1.getText();
         String password = JT_Password1.getText();
 
         try {
-            Connection conn = DatabaseConnection.connectToPostgreSQL(instance, database, port, user, password);
-            JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos origen");
-            conn.close();
+            if (CB_NombreInstancia1.getSelectedIndex() == 0) {
+                Connection conn = DatabaseConnection.getSQLServerConnection(instance, database, port, user, password);
+                JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos destino");
+                conn.close();
+            } else {
+                Connection conn = DatabaseConnection.connectToPostgreSQL(instance, database, port, user, password);
+                JOptionPane.showMessageDialog(null, "Conexión exitosa a la base de datos destino");
+                conn.close();
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
         }
@@ -494,20 +558,49 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoverMouseClicked
     private void btnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseClicked
 
-        DefaultListModel<String> modelReplicando = (DefaultListModel<String>) jListReplicando.getModel();
-        List<String> tablasAReplicar = Collections.list(modelReplicando.elements());
+        String tablaAReplicar = jListReplicando.getSelectedValue();
 
-        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+        String insta1, db1, port1, us1, pw1, insta, db, port, us, pw;
+        if (sqlServer) {
+            insta1 = instanceSQlOrigen;
+            db1 = databaseOrigen;
+            port1 = portOrigen;
+            us1 = userOrigen;
+            pw1 = passOrigen;
+            insta = instanceSQlDestino;
+            db = databaseDestino;
+            port = portDestino;
+            us = userDestino;
+            pw = passDestino;
+        } else {
+            insta = instanceSQlOrigen;
+            db = databaseOrigen;
+            port = portOrigen;
+            us = userOrigen;
+            pw = passOrigen;
+            insta1 = instanceSQlDestino;
+            db1 = databaseDestino;
+            port1 = portDestino;
+            us1 = userDestino;
+            pw1 = passDestino;
+        }
 
-            for (String tabla : tablasAReplicar) {
-                replicarTablaEstructura(connSQL, connPostgre, tabla);
-                replicarTablaInicial(connSQL, connPostgre, tabla);
+        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(insta1, db1, port1, us1, pw1); Connection connPostgre = DatabaseConnection.connectToPostgreSQL(insta, db, port, us, pw)) {
+            if(sqlServer){
+                replicarTablaEstructura(connSQL, connPostgre, tablaAReplicar);
+                replicarTablaInicial(connSQL, connPostgre, tablaAReplicar);
+                ejecutarJobReplicacionSQLSaPG();
+            }else{
+                replicarTablaEstructuraPGaSQLS(connPostgre, connSQL, tablaAReplicar);
+                replicarTablaInicialPGaSQLS(connPostgre, connSQL, tablaAReplicar);
+                ejecutarJobReplicacionPGaSQLS();
             }
+            
 
             JOptionPane.showMessageDialog(null, "Migración completada con éxito");
-
+            cargarTablasOrigen();
             // Iniciar replicación continua
-            ejecutarJobReplicacion();
+            
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -521,6 +614,46 @@ public class main extends javax.swing.JFrame {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
+        this.pack();
+        this.setLocationRelativeTo(this);
+        this.setVisible(true);
+        jFrame1.setVisible(false);
+    }//GEN-LAST:event_btnCancelarMouseClicked
+
+    private void CB_NombreInstanciaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CB_NombreInstanciaItemStateChanged
+        if (CB_NombreInstancia.getSelectedIndex() == 0) {
+            JT_NombreBD.setText("proyecto");
+            JT_Puerto.setText("1433");
+            JT_NombreUser.setText("admin");
+            JT_Password.setText("admin123");
+        } else {
+            JT_NombreBD.setText("proyecto");
+            JT_Puerto.setText("5432");
+            JT_NombreUser.setText("admin123");
+            JT_Password.setText("admin123");
+        }
+
+    }//GEN-LAST:event_CB_NombreInstanciaItemStateChanged
+
+    private void CB_NombreInstancia1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CB_NombreInstancia1ItemStateChanged
+        if (CB_NombreInstancia1.getSelectedIndex() == 0) {
+            JT_NombreBD1.setText("proyecto");
+            JT_Puerto1.setText("1433");
+            JT_NombreUser1.setText("admin");
+            JT_Password1.setText("admin123");
+        } else {
+            JT_NombreBD1.setText("proyecto");
+            JT_Puerto1.setText("5432");
+            JT_NombreUser1.setText("admin123");
+            JT_Password1.setText("admin123");
+        }
+    }//GEN-LAST:event_CB_NombreInstancia1ItemStateChanged
+
+    private void jFrame1WindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrame1WindowClosed
+        
+    }//GEN-LAST:event_jFrame1WindowClosed
 
     /**
      * @param args the command line arguments
@@ -565,8 +698,9 @@ public class main extends javax.swing.JFrame {
         });
     }
 
-    public void ejecutarJobReplicacion() {
-        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+    public void ejecutarJobReplicacionSQLSaPG() {
+        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); 
+                Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
 
             String query = "SELECT Operacion, Tabla, RegistroId FROM Bitacora WHERE Procesado = 0";
             Statement stmtSQL = connSQL.createStatement();
@@ -578,11 +712,11 @@ public class main extends javax.swing.JFrame {
                 int registroId = rs.getInt("RegistroId");
 
                 if (operacion.equals("INSERT")) {
-                    replicarInsert(connSQL, connPostgre, tabla, registroId);
+                    replicarInsertSQLSaPG(connSQL, connPostgre, tabla, registroId);
                 } else if (operacion.equals("UPDATE")) {
-                    replicarUpdate(connSQL, connPostgre, tabla, registroId);
+                    replicarUpdateSQLSaPG(connSQL, connPostgre, tabla, registroId);
                 } else if (operacion.equals("DELETE")) {
-                    replicarDelete(connPostgre, tabla, registroId);
+                    replicarDeleteSQLSaPG(connPostgre, tabla, registroId);
                 }
 
                 // Marca la operación como procesada
@@ -599,7 +733,7 @@ public class main extends javax.swing.JFrame {
         }
     }
 
-    private void replicarInsert(Connection connSQL, Connection connPostgre, String tabla, int registroId) throws SQLException {
+    private void replicarInsertSQLSaPG(Connection connSQL, Connection connPostgre, String tabla, int registroId) throws SQLException {
         // Recupera el registro completo de SQL Server
         String querySQL = "SELECT * FROM " + tabla + " WHERE Id = ?";
         PreparedStatement pstmtSQL = connSQL.prepareStatement(querySQL);
@@ -629,7 +763,7 @@ public class main extends javax.swing.JFrame {
         }
     }
 
-    private void replicarUpdate(Connection connSQL, Connection connPostgre, String tabla, int registroId) throws SQLException {
+    private void replicarUpdateSQLSaPG(Connection connSQL, Connection connPostgre, String tabla, int registroId) throws SQLException {
         // Recupera el registro completo de SQL Server
         String querySQL = "SELECT * FROM " + tabla + " WHERE Id = ?";
         PreparedStatement pstmtSQL = connSQL.prepareStatement(querySQL);
@@ -657,7 +791,7 @@ public class main extends javax.swing.JFrame {
         }
     }
 
-    private void replicarDelete(Connection connPostgre, String tabla, int registroId) throws SQLException {
+    private void replicarDeleteSQLSaPG(Connection connPostgre, String tabla, int registroId) throws SQLException {
         // Elimina el registro en PostgreSQL
         String deletePostgre = "DELETE FROM " + tabla + " WHERE Id = ?";
         PreparedStatement pstmtPostgre = connPostgre.prepareStatement(deletePostgre);
@@ -665,14 +799,117 @@ public class main extends javax.swing.JFrame {
         pstmtPostgre.executeUpdate();
     }
 
+    public void ejecutarJobReplicacionPGaSQLS() {
+        try (Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen);
+             Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+
+            String query = "SELECT Operacion, Tabla, RegistroId FROM Bitacora WHERE Procesado = 0";
+            Statement stmtPostgre = connPostgre.createStatement();
+            ResultSet rs = stmtPostgre.executeQuery(query);
+
+            while (rs.next()) {
+                String operacion = rs.getString("Operacion");
+                String tabla = rs.getString("Tabla");
+                int registroId = rs.getInt("RegistroId");
+
+                if (operacion.equals("INSERT")) {
+                    replicarInsertPGaSQLS(connPostgre, connSQL, tabla, registroId);
+                } else if (operacion.equals("UPDATE")) {
+                    replicarUpdatePGaSQLS(connPostgre, connSQL, tabla, registroId);
+                } else if (operacion.equals("DELETE")) {
+                    replicarDeletePGaSQLS(connSQL, tabla, registroId);
+                }
+
+                // Marca la operación como procesada
+                String update = "UPDATE Bitacora SET Procesado = 1 WHERE Operacion = ? AND Tabla = ? AND RegistroId = ?";
+                PreparedStatement pstmt = connPostgre.prepareStatement(update);
+                pstmt.setString(1, operacion);
+                pstmt.setString(2, tabla);
+                pstmt.setInt(3, registroId);
+                pstmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void replicarInsertPGaSQLS(Connection connPostgre, Connection connSQL, String tabla, int registroId) throws SQLException {
+        // Recupera el registro completo de PostgreSQL
+        String queryPostgre = "SELECT * FROM " + tabla + " WHERE Id = ?";
+        PreparedStatement pstmtPostgre = connPostgre.prepareStatement(queryPostgre);
+        pstmtPostgre.setInt(1, registroId);
+        ResultSet rs = pstmtPostgre.executeQuery();
+
+        if (rs.next()) {
+            // Crea una inserción en SQL Server con los datos recuperados
+            StringBuilder fields = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                if (i > 1) {
+                    fields.append(", ");
+                    values.append(", ");
+                }
+                fields.append(rs.getMetaData().getColumnName(i));
+                values.append("?");
+            }
+
+            String insertSQL = "INSERT INTO " + tabla + " (" + fields.toString() + ") VALUES (" + values.toString() + ")";
+            PreparedStatement pstmtSQL = connSQL.prepareStatement(insertSQL);
+
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                pstmtSQL.setObject(i, rs.getObject(i));
+            }
+            pstmtSQL.executeUpdate();
+        }
+    }
+
+    private void replicarUpdatePGaSQLS(Connection connPostgre, Connection connSQL, String tabla, int registroId) throws SQLException {
+        // Recupera el registro completo de PostgreSQL
+        String queryPostgre = "SELECT * FROM " + tabla + " WHERE Id = ?";
+        PreparedStatement pstmtPostgre = connPostgre.prepareStatement(queryPostgre);
+        pstmtPostgre.setInt(1, registroId);
+        ResultSet rs = pstmtPostgre.executeQuery();
+
+        if (rs.next()) {
+            // Crea una actualización en SQL Server con los datos recuperados
+            StringBuilder setClause = new StringBuilder();
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                if (i > 1) {
+                    setClause.append(", ");
+                }
+                setClause.append(rs.getMetaData().getColumnName(i)).append(" = ?");
+            }
+
+            String updateSQL = "UPDATE " + tabla + " SET " + setClause.toString() + " WHERE Id = ?";
+            PreparedStatement pstmtSQL = connSQL.prepareStatement(updateSQL);
+
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                pstmtSQL.setObject(i, rs.getObject(i));
+            }
+            pstmtSQL.setInt(rs.getMetaData().getColumnCount() + 1, registroId);
+            pstmtSQL.executeUpdate();
+        }
+    }
+
+    private void replicarDeletePGaSQLS(Connection connSQL, String tabla, int registroId) throws SQLException {
+        // Elimina el registro en SQL Server
+        String deleteSQL = "DELETE FROM " + tabla + " WHERE Id = ?";
+        PreparedStatement pstmtSQL = connSQL.prepareStatement(deleteSQL);
+        pstmtSQL.setInt(1, registroId);
+        pstmtSQL.executeUpdate();
+    }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> CB_NombreInstancia;
+    private javax.swing.JComboBox<String> CB_NombreInstancia1;
     private javax.swing.JButton JB_Guardar;
     private javax.swing.JButton JB_Probar;
     private javax.swing.JButton JB_Probar1;
     private javax.swing.JTextField JT_NombreBD;
     private javax.swing.JTextField JT_NombreBD1;
-    private javax.swing.JTextField JT_NombreInstancia;
-    private javax.swing.JTextField JT_NombreInstancia1;
     private javax.swing.JTextField JT_NombreUser;
     private javax.swing.JTextField JT_NombreUser1;
     private javax.swing.JTextField JT_Password;
@@ -705,27 +942,65 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
-private void cargarTablasOrigen() {
-        String instance = JT_NombreInstancia.getText();
-        String database = JT_NombreBD.getText();
-        String port = JT_Puerto.getText();
-        String user = JT_NombreUser.getText();
-        String password = JT_Password.getText();
+boolean sqlServer = true;
 
+    private void cargarTablasOrigen() {
         DefaultListModel<String> model = new DefaultListModel<>();
+        DefaultListModel<String> model1 = new DefaultListModel<>();
+        if (CB_NombreInstancia.getSelectedIndex() == 0) {
+            try (Connection conn = DatabaseConnection.getSQLServerConnection(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen)) {
+                DatabaseMetaData metaData = conn.getMetaData();
+                ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
 
-        try (Connection conn = DatabaseConnection.getSQLServerConnection(instance, database, port, user, password)) {
-            DatabaseMetaData metaData = conn.getMetaData();
-            ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+                while (tables.next()) {
+                    String tableName = tables.getString("TABLE_NAME");
+                    model.addElement(tableName);
+                }
 
-            while (tables.next()) {
-                String tableName = tables.getString("TABLE_NAME");
-                model.addElement(tableName);
+                jListSinReplicar.setModel(model);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
             }
+            try (Connection conn = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+                DatabaseMetaData metaData = conn.getMetaData();
+                ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
 
-            jListSinReplicar.setModel(model);
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
+                while (tables.next()) {
+                    String tableName = tables.getString("TABLE_NAME");
+                    model1.addElement(tableName);
+                }
+
+                jListReplicando.setModel(model1);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
+            }
+        } else {
+            try (Connection conn = DatabaseConnection.connectToPostgreSQL(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen)) {
+                DatabaseMetaData metaData = conn.getMetaData();
+                ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+
+                while (tables.next()) {
+                    String tableName = tables.getString("TABLE_NAME");
+                    model.addElement(tableName);
+                }
+
+                jListSinReplicar.setModel(model);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
+            }
+            try (Connection conn = DatabaseConnection.getSQLServerConnection(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+                DatabaseMetaData metaData = conn.getMetaData();
+                ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+
+                while (tables.next()) {
+                    String tableName = tables.getString("TABLE_NAME");
+                    model1.addElement(tableName);
+                }
+
+                jListReplicando.setModel(model1);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
+            }
         }
     }
 
@@ -839,4 +1114,125 @@ private void cargarTablasOrigen() {
         }
     }
 
+    
+    public void replicarTablaEstructuraPGaSQLS(Connection connPostgre, Connection connSQL, String tabla) throws SQLException {
+        // Obtener la estructura de la tabla desde PostgreSQL
+        DatabaseMetaData metaData = connPostgre.getMetaData();
+        ResultSet columns = metaData.getColumns(null, null, tabla, null);
+        ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tabla);
+        ResultSet foreignKeys = metaData.getImportedKeys(null, null, tabla);
+
+        StringBuilder createTableSQL = new StringBuilder("CREATE TABLE " + tabla + " (");
+        StringBuilder primaryKeySQL = new StringBuilder();
+        List<String> foreignKeySQL = new ArrayList<>();
+
+        while (columns.next()) {
+            String columnName = columns.getString("COLUMN_NAME");
+            String columnType = columns.getString("TYPE_NAME");
+            int columnSize = columns.getInt("COLUMN_SIZE");
+
+            if (createTableSQL.length() > ("CREATE TABLE " + tabla + " (").length()) {
+                createTableSQL.append(", ");
+            }
+
+            // Ajustar los tipos de datos según sea necesario entre PostgreSQL y SQL Server
+            String sqlServerColumnType = mapPostgreSQLToSQLServerType(columnType, columnSize);
+            createTableSQL.append(columnName).append(" ").append(sqlServerColumnType);
+        }
+
+        while (primaryKeys.next()) {
+            String pkName = primaryKeys.getString("COLUMN_NAME");
+
+            if (primaryKeySQL.length() > 0) {
+                primaryKeySQL.append(", ");
+            }
+            primaryKeySQL.append(pkName);
+        }
+
+        if (primaryKeySQL.length() > 0) {
+            createTableSQL.append(", PRIMARY KEY (").append(primaryKeySQL.toString()).append(")");
+        }
+
+        while (foreignKeys.next()) {
+            String fkName = foreignKeys.getString("FKCOLUMN_NAME");
+            String pkTableName = foreignKeys.getString("PKTABLE_NAME");
+            String pkColumnName = foreignKeys.getString("PKCOLUMN_NAME");
+
+            foreignKeySQL.add("FOREIGN KEY (" + fkName + ") REFERENCES " + pkTableName + " (" + pkColumnName + ")");
+        }
+
+        for (String fkSQL : foreignKeySQL) {
+            createTableSQL.append(", ").append(fkSQL);
+        }
+
+        createTableSQL.append(")");
+
+        // Ejecutar la declaración de creación de tabla en SQL Server
+        try (Statement stmtSQL = connSQL.createStatement()) {
+            stmtSQL.executeUpdate(createTableSQL.toString());
+        }
+    }
+
+    private String mapPostgreSQLToSQLServerType(String postgreSQLType, int size) {
+        switch (postgreSQLType.toLowerCase()) {
+            case "varchar":
+            case "character varying":
+                return "VARCHAR(" + size + ")";
+            case "char":
+            case "character":
+                return "CHAR(" + size + ")";
+            case "text":
+                return "TEXT";
+            case "integer":
+            case "int4":
+                return "INT";
+            case "bigint":
+            case "int8":
+                return "BIGINT";
+            case "real":
+            case "float4":
+                return "FLOAT";
+            case "double precision":
+            case "float8":
+                return "DOUBLE PRECISION";
+            case "boolean":
+            case "bool":
+                return "BIT";
+            case "timestamp":
+            case "timestamp without time zone":
+            case "timestamp with time zone":
+                return "DATETIME";
+            // Añadir más mapeos según sea necesario
+            default:
+                return postgreSQLType; // Por defecto, devolver el tipo original (puede necesitar ajuste)
+        }
+    }
+
+    public void replicarTablaInicialPGaSQLS(Connection connPostgre, Connection connSQL, String tabla) throws SQLException {
+        // Recupera todos los registros de PostgreSQL
+        String queryPostgre = "SELECT * FROM " + tabla;
+        Statement stmtPostgre = connPostgre.createStatement();
+        ResultSet rs = stmtPostgre.executeQuery(queryPostgre);
+
+        while (rs.next()) {
+            StringBuilder fields = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                if (i > 1) {
+                    fields.append(", ");
+                    values.append(", ");
+                }
+                fields.append(rs.getMetaData().getColumnName(i));
+                values.append("?");
+            }
+
+            String insertSQL = "INSERT INTO " + tabla + " (" + fields.toString() + ") VALUES (" + values.toString() + ")";
+            PreparedStatement pstmtSQL = connSQL.prepareStatement(insertSQL);
+
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                pstmtSQL.setObject(i, rs.getObject(i));
+            }
+            pstmtSQL.executeUpdate();
+        }
+    }
 }
