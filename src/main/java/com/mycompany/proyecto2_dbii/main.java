@@ -6,11 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -77,6 +80,8 @@ public class main extends javax.swing.JFrame {
         jListReplicando = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         jListSinReplicar = new javax.swing.JList<>();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
         JB_Probar = new javax.swing.JButton();
         JT_Password = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -167,16 +172,12 @@ public class main extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jListSinReplicar);
 
+        jLabel17.setText("Ultima vez que se utilizo:");
+
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
         jFrame1Layout.setHorizontalGroup(
             jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
-                .addGap(214, 214, 214)
-                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(74, 74, 74)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jFrame1Layout.createSequentialGroup()
                 .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jFrame1Layout.createSequentialGroup()
@@ -201,6 +202,17 @@ public class main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel16)
                 .addGap(150, 150, 150))
+            .addGroup(jFrame1Layout.createSequentialGroup()
+                .addGap(214, 214, 214)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel17)
+                    .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
+                        .addGap(74, 74, 74)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jFrame1Layout.setVerticalGroup(
             jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,16 +229,21 @@ public class main extends javax.swing.JFrame {
                         .addGap(24, 24, 24)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel17)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jFrame1Layout.createSequentialGroup()
-                        .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(59, 59, 59)
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 11, Short.MAX_VALUE)))
                 .addGap(199, 199, 199))
         );
 
@@ -558,7 +575,8 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoverMouseClicked
     private void btnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseClicked
 
-        String tablaAReplicar = jListReplicando.getSelectedValue();
+        DefaultListModel<String> modelReplicando = (DefaultListModel<String>) jListReplicando.getModel();
+        List<String> tablasAReplicar = Collections.list(modelReplicando.elements());
 
         String insta1, db1, port1, us1, pw1, insta, db, port, us, pw;
         if (sqlServer) {
@@ -586,21 +604,25 @@ public class main extends javax.swing.JFrame {
         }
 
         try (Connection connSQL = DatabaseConnection.getSQLServerConnection(insta1, db1, port1, us1, pw1); Connection connPostgre = DatabaseConnection.connectToPostgreSQL(insta, db, port, us, pw)) {
-            if(sqlServer){
-                replicarTablaEstructura(connSQL, connPostgre, tablaAReplicar);
-                replicarTablaInicial(connSQL, connPostgre, tablaAReplicar);
+            if (sqlServer) {
+                for (String tabla : tablasAReplicar) {
+                    replicarTablaEstructura(connSQL, connPostgre, tabla);
+                    replicarTablaInicial(connSQL, connPostgre, tabla);
+                }
                 ejecutarJobReplicacionSQLSaPG();
-            }else{
-                replicarTablaEstructuraPGaSQLS(connPostgre, connSQL, tablaAReplicar);
-                replicarTablaInicialPGaSQLS(connPostgre, connSQL, tablaAReplicar);
+            } else {
+                for (String tabla : tablasAReplicar) {
+                    replicarTablaEstructuraPGaSQLS(connPostgre, connSQL, tabla);
+                    replicarTablaInicialPGaSQLS(connPostgre, connSQL, tabla);
+                }
+
                 ejecutarJobReplicacionPGaSQLS();
             }
-            
+            lastDate = "" + LocalDateTime.now();
+            jLabel18.setText(lastDate);
 
             JOptionPane.showMessageDialog(null, "Migración completada con éxito");
-            cargarTablasOrigen();
             // Iniciar replicación continua
-            
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -652,7 +674,7 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_CB_NombreInstancia1ItemStateChanged
 
     private void jFrame1WindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrame1WindowClosed
-        
+
     }//GEN-LAST:event_jFrame1WindowClosed
 
     /**
@@ -698,9 +720,19 @@ public class main extends javax.swing.JFrame {
         });
     }
 
+    public static List<String> obtenerValoresDelModelo(JList<String> jList) {
+        List<String> valores = new ArrayList<>();
+        ListModel<String> modelo = jList.getModel();
+
+        for (int i = 0; i < modelo.getSize(); i++) {
+            valores.add(modelo.getElementAt(i));
+        }
+
+        return valores;
+    }
+
     public void ejecutarJobReplicacionSQLSaPG() {
-        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); 
-                Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
 
             String query = "SELECT Operacion, Tabla, RegistroId FROM Bitacora WHERE Procesado = 0";
             Statement stmtSQL = connSQL.createStatement();
@@ -800,8 +832,7 @@ public class main extends javax.swing.JFrame {
     }
 
     public void ejecutarJobReplicacionPGaSQLS() {
-        try (Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen);
-             Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+        try (Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
 
             String query = "SELECT Operacion, Tabla, RegistroId FROM Bitacora WHERE Procesado = 0";
             Statement stmtPostgre = connPostgre.createStatement();
@@ -899,9 +930,8 @@ public class main extends javax.swing.JFrame {
         pstmtSQL.setInt(1, registroId);
         pstmtSQL.executeUpdate();
     }
-    
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CB_NombreInstancia;
     private javax.swing.JComboBox<String> CB_NombreInstancia1;
@@ -929,6 +959,8 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -943,6 +975,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 boolean sqlServer = true;
+    String lastDate = "";
 
     private void cargarTablasOrigen() {
         DefaultListModel<String> model = new DefaultListModel<>();
@@ -954,26 +987,32 @@ boolean sqlServer = true;
 
                 while (tables.next()) {
                     String tableName = tables.getString("TABLE_NAME");
-                    model.addElement(tableName);
+                    if (!tableName.equalsIgnoreCase("bitacor")
+                            && !tableName.equalsIgnoreCase("trace_xe_action_map")
+                            && !tableName.equalsIgnoreCase("trace_xe_event_map")) {
+                        model.addElement(tableName);
+                    }
+
                 }
 
                 jListSinReplicar.setModel(model);
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
-            }
-            try (Connection conn = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
-                DatabaseMetaData metaData = conn.getMetaData();
-                ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
-
-                while (tables.next()) {
-                    String tableName = tables.getString("TABLE_NAME");
-                    model1.addElement(tableName);
-                }
-
                 jListReplicando.setModel(model1);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
             }
+//            try (Connection conn = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+//                DatabaseMetaData metaData = conn.getMetaData();
+//                ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+//
+//                while (tables.next()) {
+//                    String tableName = tables.getString("TABLE_NAME");
+//                    model1.addElement(tableName);
+//                }
+//
+//                jListReplicando.setModel(model1);
+//            } catch (SQLException ex) {
+//                JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
+//            }
         } else {
             try (Connection conn = DatabaseConnection.connectToPostgreSQL(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen)) {
                 DatabaseMetaData metaData = conn.getMetaData();
@@ -985,22 +1024,23 @@ boolean sqlServer = true;
                 }
 
                 jListSinReplicar.setModel(model);
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
-            }
-            try (Connection conn = DatabaseConnection.getSQLServerConnection(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
-                DatabaseMetaData metaData = conn.getMetaData();
-                ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
-
-                while (tables.next()) {
-                    String tableName = tables.getString("TABLE_NAME");
-                    model1.addElement(tableName);
-                }
-
                 jListReplicando.setModel(model1);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
             }
+//            try (Connection conn = DatabaseConnection.getSQLServerConnection(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
+//                DatabaseMetaData metaData = conn.getMetaData();
+//                ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+//
+//                while (tables.next()) {
+//                    String tableName = tables.getString("TABLE_NAME");
+//                    model1.addElement(tableName);
+//                }
+//
+//                jListReplicando.setModel(model1);
+//            } catch (SQLException ex) {
+//                JOptionPane.showMessageDialog(null, "Error al cargar las tablas: " + ex.getMessage());
+//            }
         }
     }
 
@@ -1114,32 +1154,39 @@ boolean sqlServer = true;
         }
     }
 
-    
     public void replicarTablaEstructuraPGaSQLS(Connection connPostgre, Connection connSQL, String tabla) throws SQLException {
-        // Obtener la estructura de la tabla desde PostgreSQL
-        DatabaseMetaData metaData = connPostgre.getMetaData();
-        ResultSet columns = metaData.getColumns(null, null, tabla, null);
-        ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tabla);
-        ResultSet foreignKeys = metaData.getImportedKeys(null, null, tabla);
+        // Obtener la estructura de la tabla desde PostgreSQL usando pg_catalog
+        String queryColumns = "SELECT column_name, data_type, character_maximum_length, numeric_precision, numeric_scale "
+                + "FROM information_schema.columns "
+                + "WHERE table_name = ?";
+
+        PreparedStatement stmtColumns = connPostgre.prepareStatement(queryColumns);
+        stmtColumns.setString(1, tabla);
+        ResultSet columns = stmtColumns.executeQuery();
 
         StringBuilder createTableSQL = new StringBuilder("CREATE TABLE " + tabla + " (");
         StringBuilder primaryKeySQL = new StringBuilder();
         List<String> foreignKeySQL = new ArrayList<>();
 
         while (columns.next()) {
-            String columnName = columns.getString("COLUMN_NAME");
-            String columnType = columns.getString("TYPE_NAME");
-            int columnSize = columns.getInt("COLUMN_SIZE");
+            String columnName = columns.getString("column_name");
+            String columnType = columns.getString("data_type");
+            int columnSize = columns.getInt("character_maximum_length");
+            int numericPrecision = columns.getInt("numeric_precision");
+            int numericScale = columns.getInt("numeric_scale");
 
             if (createTableSQL.length() > ("CREATE TABLE " + tabla + " (").length()) {
                 createTableSQL.append(", ");
             }
 
             // Ajustar los tipos de datos según sea necesario entre PostgreSQL y SQL Server
-            String sqlServerColumnType = mapPostgreSQLToSQLServerType(columnType, columnSize);
+            String sqlServerColumnType = mapPostgreSQLToSQLServerType(columnType, columnSize, numericPrecision, numericScale);
+            System.out.println("|||||||||||||||"+sqlServerColumnType);
             createTableSQL.append(columnName).append(" ").append(sqlServerColumnType);
         }
 
+        // Obtener claves primarias
+        ResultSet primaryKeys = connPostgre.getMetaData().getPrimaryKeys(null, null, tabla);
         while (primaryKeys.next()) {
             String pkName = primaryKeys.getString("COLUMN_NAME");
 
@@ -1153,6 +1200,8 @@ boolean sqlServer = true;
             createTableSQL.append(", PRIMARY KEY (").append(primaryKeySQL.toString()).append(")");
         }
 
+        // Obtener claves foráneas
+        ResultSet foreignKeys = connPostgre.getMetaData().getImportedKeys(null, null, tabla);
         while (foreignKeys.next()) {
             String fkName = foreignKeys.getString("FKCOLUMN_NAME");
             String pkTableName = foreignKeys.getString("PKTABLE_NAME");
@@ -1169,15 +1218,17 @@ boolean sqlServer = true;
 
         // Ejecutar la declaración de creación de tabla en SQL Server
         try (Statement stmtSQL = connSQL.createStatement()) {
+            System.out.println("Executing SQL: " + createTableSQL.toString());
             stmtSQL.executeUpdate(createTableSQL.toString());
         }
     }
 
-    private String mapPostgreSQLToSQLServerType(String postgreSQLType, int size) {
+    private String mapPostgreSQLToSQLServerType(String postgreSQLType, int size, int precision, int scale) {
         switch (postgreSQLType.toLowerCase()) {
-            case "varchar":
             case "character varying":
-                return "VARCHAR(" + size + ")";
+                return size > 0 ? "varchar(" + size + ")" : "varchar(MAX)";
+            case "varchar":
+                return size > 0 ? "NVARCHAR(" + size + ")" : "NVARCHAR(MAX)";
             case "char":
             case "character":
                 return "CHAR(" + size + ")";
@@ -1191,17 +1242,22 @@ boolean sqlServer = true;
                 return "BIGINT";
             case "real":
             case "float4":
-                return "FLOAT";
+                return "REAL";
             case "double precision":
             case "float8":
-                return "DOUBLE PRECISION";
+                return "FLOAT";
             case "boolean":
             case "bool":
                 return "BIT";
+            case "date":
+                return "DATE";
             case "timestamp":
             case "timestamp without time zone":
             case "timestamp with time zone":
                 return "DATETIME";
+            case "numeric":
+            case "decimal":
+                return "DECIMAL(" + precision + ", " + scale + ")";
             // Añadir más mapeos según sea necesario
             default:
                 return postgreSQLType; // Por defecto, devolver el tipo original (puede necesitar ajuste)
