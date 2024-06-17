@@ -739,7 +739,7 @@ public class main extends javax.swing.JFrame {
     public void ejecutarJobReplicacionSQLSaPG() {
         try (Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
 
-            String query = "SELECT Operacion, Tabla, RegistroId FROM Bitacora WHERE Procesado = 0";
+            String query = "SELECT Operacion, Tabla, RegistroId FROM Bitacora WHERE procesado = 0";
             Statement stmtSQL = connSQL.createStatement();
             ResultSet rs = stmtSQL.executeQuery(query);
 
@@ -772,7 +772,7 @@ public class main extends javax.swing.JFrame {
 
     private void replicarInsertSQLSaPG(Connection connSQL, Connection connPostgre, String tabla, int registroId) throws SQLException {
         // Recupera el registro completo de SQL Server
-        String querySQL = "SELECT * FROM " + tabla + " WHERE Id = ?";
+        String querySQL = "SELECT * FROM " + tabla + " WHERE ssn = ?";
         PreparedStatement pstmtSQL = connSQL.prepareStatement(querySQL);
         pstmtSQL.setInt(1, registroId);
         ResultSet rs = pstmtSQL.executeQuery();
@@ -802,7 +802,7 @@ public class main extends javax.swing.JFrame {
 
     private void replicarUpdateSQLSaPG(Connection connSQL, Connection connPostgre, String tabla, int registroId) throws SQLException {
         // Recupera el registro completo de SQL Server
-        String querySQL = "SELECT * FROM " + tabla + " WHERE Id = ?";
+        String querySQL = "SELECT * FROM " + tabla + " WHERE ssn = ?";
         PreparedStatement pstmtSQL = connSQL.prepareStatement(querySQL);
         pstmtSQL.setInt(1, registroId);
         ResultSet rs = pstmtSQL.executeQuery();
@@ -817,7 +817,7 @@ public class main extends javax.swing.JFrame {
                 setClause.append(rs.getMetaData().getColumnName(i)).append(" = ?");
             }
 
-            String updatePostgre = "UPDATE " + tabla + " SET " + setClause.toString() + " WHERE Id = ?";
+            String updatePostgre = "UPDATE " + tabla + " SET " + setClause.toString() + " WHERE ssn = ?";
             PreparedStatement pstmtPostgre = connPostgre.prepareStatement(updatePostgre);
 
             for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
@@ -830,7 +830,7 @@ public class main extends javax.swing.JFrame {
 
     private void replicarDeleteSQLSaPG(Connection connPostgre, String tabla, int registroId) throws SQLException {
         // Elimina el registro en PostgreSQL
-        String deletePostgre = "DELETE FROM " + tabla + " WHERE Id = ?";
+        String deletePostgre = "DELETE FROM " + tabla + " WHERE ssn = ?";
         PreparedStatement pstmtPostgre = connPostgre.prepareStatement(deletePostgre);
         pstmtPostgre.setInt(1, registroId);
         pstmtPostgre.executeUpdate();
@@ -839,7 +839,7 @@ public class main extends javax.swing.JFrame {
     public void ejecutarJobReplicacionPGaSQLS() {
         try (Connection connPostgre = DatabaseConnection.connectToPostgreSQL(instanceSQlOrigen, databaseOrigen, portOrigen, userOrigen, passOrigen); Connection connSQL = DatabaseConnection.getSQLServerConnection(instanceSQlDestino, databaseDestino, portDestino, userDestino, passDestino)) {
 
-            String query = "SELECT Operacion, Tabla, RegistroId FROM Bitacora WHERE Procesado = 0";
+            String query = "SELECT Operacion, Tabla, RegistroId FROM Bitacora WHERE procesado = 0";
             Statement stmtPostgre = connPostgre.createStatement();
             ResultSet rs = stmtPostgre.executeQuery(query);
 
@@ -857,7 +857,7 @@ public class main extends javax.swing.JFrame {
                 }
 
                 // Marca la operación como procesada
-                String update = "UPDATE Bitacora SET Procesado = 1 WHERE Operacion = ? AND Tabla = ? AND RegistroId = ?";
+                String update = "UPDATE Bitacora SET procesado = 1 WHERE Operacion = ? AND Tabla = ? AND RegistroId = ?";
                 PreparedStatement pstmt = connPostgre.prepareStatement(update);
                 pstmt.setString(1, operacion);
                 pstmt.setString(2, tabla);
@@ -872,7 +872,7 @@ public class main extends javax.swing.JFrame {
 
     private void replicarInsertPGaSQLS(Connection connPostgre, Connection connSQL, String tabla, int registroId) throws SQLException {
         // Recupera el registro completo de PostgreSQL
-        String queryPostgre = "SELECT * FROM " + tabla + " WHERE Id = ?";
+        String queryPostgre = "SELECT * FROM " + tabla + " WHERE ssn = ?";
         PreparedStatement pstmtPostgre = connPostgre.prepareStatement(queryPostgre);
         pstmtPostgre.setInt(1, registroId);
         ResultSet rs = pstmtPostgre.executeQuery();
@@ -902,7 +902,7 @@ public class main extends javax.swing.JFrame {
 
     private void replicarUpdatePGaSQLS(Connection connPostgre, Connection connSQL, String tabla, int registroId) throws SQLException {
         // Recupera el registro completo de PostgreSQL
-        String queryPostgre = "SELECT * FROM " + tabla + " WHERE Id = ?";
+        String queryPostgre = "SELECT * FROM " + tabla + " WHERE ssn = ?";
         PreparedStatement pstmtPostgre = connPostgre.prepareStatement(queryPostgre);
         pstmtPostgre.setInt(1, registroId);
         ResultSet rs = pstmtPostgre.executeQuery();
@@ -917,7 +917,7 @@ public class main extends javax.swing.JFrame {
                 setClause.append(rs.getMetaData().getColumnName(i)).append(" = ?");
             }
 
-            String updateSQL = "UPDATE " + tabla + " SET " + setClause.toString() + " WHERE Id = ?";
+            String updateSQL = "UPDATE " + tabla + " SET " + setClause.toString() + " WHERE ssn = ?";
             PreparedStatement pstmtSQL = connSQL.prepareStatement(updateSQL);
 
             for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
@@ -930,7 +930,7 @@ public class main extends javax.swing.JFrame {
 
     private void replicarDeletePGaSQLS(Connection connSQL, String tabla, int registroId) throws SQLException {
         // Elimina el registro en SQL Server
-        String deleteSQL = "DELETE FROM " + tabla + " WHERE Id = ?";
+        String deleteSQL = "DELETE FROM " + tabla + " WHERE ssn = ?";
         PreparedStatement pstmtSQL = connSQL.prepareStatement(deleteSQL);
         pstmtSQL.setInt(1, registroId);
         pstmtSQL.executeUpdate();
@@ -1261,7 +1261,6 @@ boolean sqlServer = true;
 
             // Ajustar los tipos de datos según sea necesario entre PostgreSQL y SQL Server
             String sqlServerColumnType = mapPostgreSQLToSQLServerType(columnType, columnSize, numericPrecision, numericScale);
-            System.out.println("|||||||||||||||" + sqlServerColumnType);
             createTableSQL.append(columnName).append(" ").append(sqlServerColumnType);
         }
 
