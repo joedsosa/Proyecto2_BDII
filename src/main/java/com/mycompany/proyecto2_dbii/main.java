@@ -207,12 +207,14 @@ public class main extends javax.swing.JFrame {
                 .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel17)
                     .addGroup(jFrame1Layout.createSequentialGroup()
-                        .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
-                        .addGap(74, 74, 74)
+                        .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jFrame1Layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(298, Short.MAX_VALUE))
         );
         jFrame1Layout.setVerticalGroup(
             jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,17 +236,13 @@ public class main extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel17)
-                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jFrame1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jFrame1Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 11, Short.MAX_VALUE)))
-                .addGap(199, 199, 199))
+                .addGap(2, 2, 2)
+                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 198, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -603,10 +601,11 @@ public class main extends javax.swing.JFrame {
             pw1 = passDestino;
         }
 
-        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(insta1, db1, port1, us1, pw1); Connection connPostgre = DatabaseConnection.connectToPostgreSQL(insta, db, port, us, pw)) {
+        try (Connection connSQL = DatabaseConnection.getSQLServerConnection(insta1, db1, port1, us1, pw1); 
+            Connection connPostgre = DatabaseConnection.connectToPostgreSQL(insta, db, port, us, pw)) {
             if (sqlServer) {
                 for (String tabla : tablasAReplicar) {
-                    if (tableExistsSQLaPG(connPostgre, tabla) == true){
+                    if (tableExistsSQLaPG(connPostgre, tabla) == true) {
                         dropTableSQLaPG(connPostgre, tabla);
                     }
                     replicarTablaEstructura(connSQL, connPostgre, tabla);
@@ -615,7 +614,7 @@ public class main extends javax.swing.JFrame {
                 ejecutarJobReplicacionSQLSaPG();
             } else {
                 for (String tabla : tablasAReplicar) {
-                    if (tableExistsPGaSQL(connSQL, tabla)== true){
+                    if (tableExistsPGaSQL(connSQL, tabla) == true) {
                         dropTablePGaSQL(connSQL, tabla);
                     }
                     replicarTablaEstructuraPGaSQLS(connPostgre, connSQL, tabla);
@@ -993,7 +992,7 @@ boolean sqlServer = true;
 
                 while (tables.next()) {
                     String tableName = tables.getString("TABLE_NAME");
-                    if (!tableName.equalsIgnoreCase("bitacor")
+                    if (!tableName.equalsIgnoreCase("bitacora")
                             && !tableName.equalsIgnoreCase("trace_xe_action_map")
                             && !tableName.equalsIgnoreCase("trace_xe_event_map")) {
                         model.addElement(tableName);
@@ -1056,19 +1055,25 @@ boolean sqlServer = true;
         try (Statement stmt = connPostgre.createStatement()) {
             // Ejecutar la consulta
             return stmt.executeQuery(query).next();
+        }catch (Exception e){
+            System.out.println("El error es aca #######################");
+            return false;
         }
+            
     }
-    
+
     private static void dropTableSQLaPG(Connection connPostgre, String tableName) throws SQLException {
         // Consulta para eliminar la tabla en PostgreSQL
-        String query = "DROP TABLE " + tableName;
+        String query = "DROP TABLE IF EXISTS " +tableName+";";
         try (Statement stmt = connPostgre.createStatement()) {
             // Ejecutar la consulta de eliminación
             stmt.executeUpdate(query);
+        }catch (Exception e){
+            System.out.println("El error es aca //////////////////////////////////////////");
         }
     }
-    
-     private static boolean tableExistsPGaSQL(Connection connSQL, String tableName) throws SQLException {
+
+    private static boolean tableExistsPGaSQL(Connection connSQL, String tableName) throws SQLException {
         // Consulta para verificar la existencia de la tabla en SQL Server
         String query = "IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + tableName + "') SELECT 1 ELSE SELECT 0";
         try (Statement stmt = connSQL.createStatement()) {
@@ -1079,13 +1084,13 @@ boolean sqlServer = true;
 
     private static void dropTablePGaSQL(Connection connSQL, String tableName) throws SQLException {
         // Consulta para eliminar la tabla en SQL Server
-        String query = "DROP TABLE " + tableName;
+        String query = "DROP TABLE IF EXISTS " + tableName+";";
         try (Statement stmt = connSQL.createStatement()) {
             // Ejecutar la consulta de eliminación
             stmt.executeUpdate(query);
         }
     }
-    
+
     private void replicarTablaEstructura(Connection connSQL, Connection connPostgre, String tabla) throws SQLException {
         // Obtener la estructura de la tabla desde SQL Server
         DatabaseMetaData metaData = connSQL.getMetaData();
@@ -1141,6 +1146,39 @@ boolean sqlServer = true;
         // Ejecutar la declaración de creación de tabla en PostgreSQL
         try (Statement stmtPostgre = connPostgre.createStatement()) {
             stmtPostgre.executeUpdate(createTableSQL.toString());
+        }
+        String crearFuncion = "CREATE OR REPLACE FUNCTION funcion_auditoria_" + tabla + "()\n"
+                + "RETURNS TRIGGER AS $$\n"
+                + "BEGIN\n"
+                + "    IF TG_OP = 'INSERT' THEN\n"
+                + "        INSERT INTO bitacora (Operacion, Tabla, RegistroId, Fecha)\n"
+                + "        VALUES ('INSERT', TG_TABLE_NAME, NEW.ssn, NOW());\n"
+                + "    ELSIF TG_OP = 'UPDATE' THEN\n"
+                + "        INSERT INTO bitacora (Operacion, Tabla, RegistroId, Fecha)\n"
+                + "        VALUES ('UPDATE', TG_TABLE_NAME, NEW.ssn, NOW());\n"
+                + "    ELSIF TG_OP = 'DELETE' THEN\n"
+                + "        INSERT INTO bitacora (Operacion, Tabla, RegistroId, Fecha)\n"
+                + "        VALUES ('DELETE', TG_TABLE_NAME, OLD.ssn, now());\n"
+                + "    END IF;\n"
+                + "    RETURN NEW;\n"
+                + "END;\n"
+                + "$$ LANGUAGE plpgsql;";
+
+        System.out.println("CrearFuncion: " + crearFuncion);
+        String trigger = "CREATE TRIGGER trigger_auditoria_" + tabla + "\n"
+                + "AFTER INSERT OR UPDATE OR DELETE ON "+tabla+"\n"
+                + "FOR EACH ROW\n"
+                + "EXECUTE FUNCTION funcion_auditoria_" + tabla + "();";
+        System.out.println("CrearTrigger: " + trigger);
+
+        try (Statement stmtPostgre = connPostgre.createStatement()) {
+            stmtPostgre.execute(crearFuncion);
+            System.out.println("Band1");
+            stmtPostgre.execute(trigger);
+            System.out.println("Band2");
+        } catch (Exception e) {
+            System.out.println("ERROR FUE AQUI");
+            e.printStackTrace();
         }
     }
 
@@ -1223,7 +1261,7 @@ boolean sqlServer = true;
 
             // Ajustar los tipos de datos según sea necesario entre PostgreSQL y SQL Server
             String sqlServerColumnType = mapPostgreSQLToSQLServerType(columnType, columnSize, numericPrecision, numericScale);
-            System.out.println("|||||||||||||||"+sqlServerColumnType);
+            System.out.println("|||||||||||||||" + sqlServerColumnType);
             createTableSQL.append(columnName).append(" ").append(sqlServerColumnType);
         }
 
@@ -1333,4 +1371,5 @@ boolean sqlServer = true;
             pstmtSQL.executeUpdate();
         }
     }
+
 }
