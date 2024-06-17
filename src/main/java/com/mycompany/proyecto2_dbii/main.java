@@ -606,12 +606,18 @@ public class main extends javax.swing.JFrame {
         try (Connection connSQL = DatabaseConnection.getSQLServerConnection(insta1, db1, port1, us1, pw1); Connection connPostgre = DatabaseConnection.connectToPostgreSQL(insta, db, port, us, pw)) {
             if (sqlServer) {
                 for (String tabla : tablasAReplicar) {
+                    if (tableExistsSQLaPG(connPostgre, tabla) == true){
+                        dropTableSQLaPG(connPostgre, tabla);
+                    }
                     replicarTablaEstructura(connSQL, connPostgre, tabla);
                     replicarTablaInicial(connSQL, connPostgre, tabla);
                 }
                 ejecutarJobReplicacionSQLSaPG();
             } else {
                 for (String tabla : tablasAReplicar) {
+                    if (tableExistsPGaSQL(connSQL, tabla)== true){
+                        dropTablePGaSQL(connSQL, tabla);
+                    }
                     replicarTablaEstructuraPGaSQLS(connPostgre, connSQL, tabla);
                     replicarTablaInicialPGaSQLS(connPostgre, connSQL, tabla);
                 }
@@ -1044,6 +1050,42 @@ boolean sqlServer = true;
         }
     }
 
+    private static boolean tableExistsSQLaPG(Connection connPostgre, String tableName) throws SQLException {
+        // Consulta para verificar la existencia de la tabla en PostgreSQL
+        String query = "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = '" + tableName + "')";
+        try (Statement stmt = connPostgre.createStatement()) {
+            // Ejecutar la consulta
+            return stmt.executeQuery(query).next();
+        }
+    }
+    
+    private static void dropTableSQLaPG(Connection connPostgre, String tableName) throws SQLException {
+        // Consulta para eliminar la tabla en PostgreSQL
+        String query = "DROP TABLE " + tableName;
+        try (Statement stmt = connPostgre.createStatement()) {
+            // Ejecutar la consulta de eliminación
+            stmt.executeUpdate(query);
+        }
+    }
+    
+     private static boolean tableExistsPGaSQL(Connection connSQL, String tableName) throws SQLException {
+        // Consulta para verificar la existencia de la tabla en SQL Server
+        String query = "IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + tableName + "') SELECT 1 ELSE SELECT 0";
+        try (Statement stmt = connSQL.createStatement()) {
+            // Ejecutar la consulta
+            return stmt.executeQuery(query).next();
+        }
+    }
+
+    private static void dropTablePGaSQL(Connection connSQL, String tableName) throws SQLException {
+        // Consulta para eliminar la tabla en SQL Server
+        String query = "DROP TABLE " + tableName;
+        try (Statement stmt = connSQL.createStatement()) {
+            // Ejecutar la consulta de eliminación
+            stmt.executeUpdate(query);
+        }
+    }
+    
     private void replicarTablaEstructura(Connection connSQL, Connection connPostgre, String tabla) throws SQLException {
         // Obtener la estructura de la tabla desde SQL Server
         DatabaseMetaData metaData = connSQL.getMetaData();
